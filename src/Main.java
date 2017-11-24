@@ -26,18 +26,19 @@ public class Main {
 			nodes.add(nodeID);
 		}
 		
+		Pose start = new Pose(0, 0.0);
+		Pose end = new Pose(3, 90.0);
 		
-		double[] pose = {0, 90};
 		Graph<Integer> maze = new Graph<Integer>(nodes, neighbours);
-		Robot<Integer> bernie = new Robot<Integer>(maze, pose);
+		Robot<Integer> bernie = new Robot<Integer>(maze, start);
 		bernie.breadthFirstSearch(0, 19);
 		System.out.println(bernie.getPath());
-		/*
+		
 		while (bernie.getPath() != null) {
 			Integer nextNode = bernie.getPath().removeLast();
 			bernie.moveNextNode(nextNode);
 		}
-		*/
+		
 		
 		
 		
