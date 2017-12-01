@@ -18,7 +18,6 @@ public class Main {
 		
 		HashMap<Integer, Vector<Integer>> neighbours = new HashMap<Integer, Vector<Integer>>();
 		
-		
 		Vector<Integer> nodes = new Vector<Integer>();
 		for (int i = 0; i < 25; i++) {
 			Integer nodeID = Integer.valueOf(i);
@@ -31,18 +30,16 @@ public class Main {
 		
 		Graph<Integer> maze = new Graph<Integer>(nodes, neighbours);
 		Robot<Integer> bernie = new Robot<Integer>(maze, start);
+		//bernie.pivot_test();
+		//bernie.moveAhead_test();
+		//bernie.orient_test1();
+		//bernie.orient_test2();
 		bernie.breadthFirstSearch(0, 19);
 		System.out.println(bernie.getPath());
 		
 		while (bernie.getPath() != null) {
 			Integer nextNode = bernie.getPath().removeLast();
 			bernie.moveNextNode(nextNode);
-		}
-		
-		
-		
-		
-		
+		}	
 	}
-
 };
