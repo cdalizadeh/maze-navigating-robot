@@ -33,7 +33,6 @@ public class Robot<T> extends GraphNavigator<T> {
 		else if (wall == "right") {
 			Motor.A.rotate(200);
 		}
-		
 	}
 	
 	public void moveNextNode(T nextNode) {
@@ -67,6 +66,7 @@ public class Robot<T> extends GraphNavigator<T> {
 		double pivotTheta = deltaTheta > 180.0 ? deltaTheta : deltaTheta - 360.0;
 		pivot(pivotTheta);
 		this.pose.theta = newTheta;
+	}
 	
 	public void pivot(double turnAngle){
 		orientationSensor.reset();
