@@ -106,5 +106,30 @@ public class Robot<T> extends GraphNavigator<T> {
 		Motor.B.setSpeed(0);
 		Motor.C.setSpeed(0);
 	}
+
+	public void pivot_test(){
+		pivot(90);
+		pivot(-90);
+		System.exit(0)
+	}
+
+	public void moveAhead_test(){
+		moveAhead(30.48);
+		System.exit(0)
+	}
+
+	public void orient_test1(){
+		this.pose.theta = 0;
+		orient(90)
+		assert(this.pose.theta == 90);
+		System.exit(0)
+	}
+
+	public void orient_test2(){
+		this.pose.theta = 90;
+		orient(270)
+		assert(this.pose.theta == 270);
+		System.exit(0)
+	}
 }
 	
