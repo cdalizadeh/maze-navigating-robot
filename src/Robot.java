@@ -1,9 +1,6 @@
-import lejos.hardware.motor.EV3LargeRegulatedMotor;
-import lejos.hardware.motor.EV3MediumRegulatedMotor;
+
 import lejos.hardware.motor.Motor;
-import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.SensorPort;
-import lejos.remote.ev3.RemotePort;
 
 import lejos.hardware.sensor.EV3GyroSensor;
 import lejos.hardware.sensor.EV3UltrasonicSensor;
@@ -34,31 +31,38 @@ public class Robot<T> extends GraphNavigator<T> {
 		int delta = pose.node - node;
 		switch (delta){
 			case -1:
-				pivot(0);
+				orient(0);
 				moveAhead();
 				break;
 			case -5:
-				pivot(270);
+				orient(270);
 				moveAhead();
 				break;
 			case 1:
-				pivot(180);
+				orient(180);
 				moveAhead();
 				break;
 			case 5:
-				pivot(90);
+				orient(90);
 				moveAhead();
 				break;
 		}
+		this.pose.node = (int) nextNode;
 	}
-
+	
+	public void orient(double newTheta) {
+		double deltaTheta = newTheta - this.pose.theta;
+		double pivotTheta = deltaTheta > 180.0 ? deltaTheta : deltaTheta - 360.0;
+		pivot(pivotTheta);
+		this.pose.theta = newTheta;
+	}
+	
 	public void pivot(double turnAngle){
 		orientationSensor.reset();
 		int sampleSize = orientationSensor.sampleSize();
 		float[] angle = new float[sampleSize];
 		orientationSensor.getAngleMode().fetchSample(angle, 0);
 		
-		double startAngle = angle[0];
 		int speed = 8;
 		int slowSpeed = 3;
 		Motor.C.setSpeed(speed);
