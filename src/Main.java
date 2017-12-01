@@ -16,30 +16,38 @@ public class Main {
 							 {16, 20}, {11, 15}, {12, 22}, {13, 23}, {24},
 							 {15, 21}, {20}, {17}, {18, 24}, {19, 23}};
 		
-		HashMap<Integer, Vector<Integer>> neighbours = new HashMap<Integer, Vector<Integer>>();
+		String[][] wallArray = {{}};
 		
+		HashMap<Integer, Vector<Integer>> neighbours = new HashMap<Integer, Vector<Integer>>();
+		Vector<HashMap<Integer, String>> walls = new Vector<HashMap<Integer, String>>();
 		Vector<Integer> nodes = new Vector<Integer>();
+		
 		for (int i = 0; i < 25; i++) {
 			Integer nodeID = Integer.valueOf(i);
 			neighbours.put(nodeID, new Vector<Integer>(Arrays.asList(neighbourArray[i])));
 			nodes.add(nodeID);
+			walls.add(new HashMap<Integer, String>());
+			for (Integer neighbour : neighbours.get(nodeID)) {
+				walls.get(i).put(neighbour, wallArray[nodeID][neighbour]);
+			}
 		}
 		
 		Pose start = new Pose(0, 0.0);
 		Pose end = new Pose(3, 90.0);
 		
 		Graph<Integer> maze = new Graph<Integer>(nodes, neighbours);
-		Robot<Integer> bernie = new Robot<Integer>(maze, start);
+		Robot<Integer> bernie = new Robot<Integer>(maze, start, walls);
 		//bernie.pivot_test();
 		//bernie.moveAhead_test();
 		//bernie.orient_test1();
 		//bernie.orient_test2();
-		bernie.breadthFirstSearch(0, 19);
+		bernie.breadthFirstSearch(start.node, end.node);
 		System.out.println(bernie.getPath());
 		
 		while (bernie.getPath() != null) {
 			Integer nextNode = bernie.getPath().removeLast();
 			bernie.moveNextNode(nextNode);
 		}	
+		bernie.orient(end.theta);
 	}
 };
