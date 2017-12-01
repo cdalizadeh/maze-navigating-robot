@@ -52,42 +52,42 @@ public class Robot<T> extends GraphNavigator<T> {
 		}
 	}
 
-	public void pivot(double endAngle){	
+	public void pivot(double turnAngle){
+		orientationSensor.reset();
 		int sampleSize = orientationSensor.sampleSize();
 		float[] angle = new float[sampleSize];
 		orientationSensor.getAngleMode().fetchSample(angle, 0);
 		
 		double startAngle = angle[0];
+		int speed = 8;
+		int slowSpeed = 3;
+		Motor.C.setSpeed(speed);
+		Motor.B.setSpeed(speed);
 		
-		double turn = endAngle - this.pose.theta;
-		System.out.println(""+turn+""+angle[0]);
-		
-		int speed = 0;
-		
-		
-			while(angle[0] - turn > 2){
-				speed = Math.max(8,(int)(angle[0] - turn));
-				Motor.C.setSpeed(speed);
-				Motor.B.setSpeed(speed);
-				Motor.B.forward();
-				Motor.C.backward();
+		if (turnAngle > 0){
+			Motor.B.forward();
+			Motor.C.backward();
+			while(angle[0] < turnAngle - 5){
 				orientationSensor.getAngleMode().fetchSample(angle, 0);
-				System.out.println(""+angle[0]);
 			}
-		
-		
-		
-			while(angle[0] - turn < -2){
-				speed = Math.max(8,(int)(turn - angle[0]));
-				Motor.C.setSpeed(speed);
-				Motor.B.setSpeed(speed);
-				Motor.B.backward();
-				Motor.C.forward();
+			Motor.C.setSpeed(slowSpeed);
+			Motor.B.setSpeed(slowSpeed);
+			while(angle[0] < turnAngle){
 				orientationSensor.getAngleMode().fetchSample(angle, 0);
-				System.out.println(""+angle[0]);
-			
+			}
 		}
-		
+		else{
+			Motor.C.forward();
+			Motor.B.backward();
+			while(angle[0] > turnAngle + 5){
+				orientationSensor.getAngleMode().fetchSample(angle, 0);
+			}
+			Motor.C.setSpeed(slowSpeed);
+			Motor.B.setSpeed(slowSpeed);
+			while(angle[0] > turnAngle){
+				orientationSensor.getAngleMode().fetchSample(angle, 0);
+			}
+		}
 		Motor.B.setSpeed(0);
 		Motor.C.setSpeed(0);
 	}
