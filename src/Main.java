@@ -44,7 +44,7 @@ public class Main {
 		bernie.breadthFirstSearch(start.node, end.node);
 		System.out.println(bernie.getPath());
 		
-		while (bernie.getPath() != null) {
+		while (!bernie.getPath().isEmpty()) {
 			Integer nextNode = bernie.getPath().removeLast();
 			bernie.moveNextNode(nextNode);
 		}	
