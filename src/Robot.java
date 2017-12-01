@@ -18,33 +18,45 @@ public class Robot<T> extends GraphNavigator<T> {
 		EV3GyroSensor orientationSensor = new EV3GyroSensor(SensorPort.S3);
 	}
 	
-	public void moveAhead() {
-		double revolutions = 30.5 / (5.6 * Math.PI);
+	public void moveAhead(double distance) {
+		double wheelDiameter = 5.6;
+		double revolutions = distance / (wheelDiameter * Math.PI);
 		int angle =  (int) (revolutions * 1.733);
 		Motor.B.rotate(angle);
 		Motor.C.rotate(angle);
 	}
 	
+	public void followWall(String wall, double distance) {
+		if (wall == "left") {
+			Motor.A.rotate(-200);
+		}
+		else if (wall == "right") {
+			Motor.A.rotate(200);
+		}
+		
+	}
 	
 	public void moveNextNode(T nextNode) {
 		int node = (int) nextNode;
 		int delta = pose.node - node;
+		double distance = 30.48;
 		switch (delta){
 			case -1:
 				orient(0);
-				moveAhead();
+				moveAhead(distance);
+				// followWall(wall, distance)
 				break;
 			case -5:
 				orient(270);
-				moveAhead();
+				moveAhead(distance);
 				break;
 			case 1:
 				orient(180);
-				moveAhead();
+				moveAhead(distance);
 				break;
 			case 5:
 				orient(90);
-				moveAhead();
+				moveAhead(distance);
 				break;
 		}
 		this.pose.node = (int) nextNode;
@@ -55,7 +67,6 @@ public class Robot<T> extends GraphNavigator<T> {
 		double pivotTheta = deltaTheta > 180.0 ? deltaTheta : deltaTheta - 360.0;
 		pivot(pivotTheta);
 		this.pose.theta = newTheta;
-	}
 	
 	public void pivot(double turnAngle){
 		orientationSensor.reset();
